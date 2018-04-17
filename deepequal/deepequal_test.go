@@ -1,29 +1,43 @@
 package deepequal
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"testing"
 )
 
+type Nested struct {
+	a string
+	b string
+}
+
+type Test struct {
+	a string
+	b int
+	c bool
+	d string
+	e Nested
+}
+
+var tests = []Test{
+	Test{a: "foo", b: 5, c: false, d: "bar", e: Nested{a: "zap", b: "pow"}},
+	Test{a: "bar", b: 5, c: true, d: "bar", e: Nested{a: "zap", b: "pow"}},
+}
+
 func TestDiff(t *testing.T) {
-	f1a := readFile("test/fa.txt")
-	f1b := readFile("test/fb.txt")
-	diff := Diff(f1a, f1b).String()
-	fmt.Println(diff)
-	fmt.Print("\n\n")
+	var a, b string
 
-	a := "aaabbbcccddd"
-	b := "aaaccceeedddfff"
+	a = "aaabbbcccddd"
+	b = "aaaccceeedddfff"
 
-	Diff(a, b).Print()
-	fmt.Print("\n\n")
+	Assert(t, a, b, "a, b not equal: '%v', '%v'", a, b)
 
-	l1a := readFile("test/log-a.txt")
-	l1b := readFile("test/log-b.txt")
-	Diff(l1a, l1b).Print()
-	fmt.Print("\n\n")
+	a = readFile("../diff/test/fa.txt")
+	b = readFile("../diff/test/fb.txt")
+	Assert(t, a, b, "a, b not equal")
+
+	Assert(t, tests[0], tests[1], "a, b tests not equal")
+
 }
 
 func readFile(file string) string {

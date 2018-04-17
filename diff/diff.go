@@ -1,4 +1,4 @@
-package deepequal
+package diff
 
 import (
 	"bytes"
@@ -12,13 +12,13 @@ import (
 	dmp "github.com/sergi/go-diff/diffmatchpatch"
 )
 
+var red = color.New(color.FgRed)
+var green = color.New(color.FgGreen)
+
 const (
 	nle = "%0A"
 	nl  = "\n"
 )
-
-var red = color.New(color.FgRed)
-var green = color.New(color.FgGreen)
 
 var unescaper = strings.NewReplacer(
 	"%21", "!", "%7E", "~", "%27", "'",
@@ -33,9 +33,10 @@ var unescaper = strings.NewReplacer(
 type Differ interface {
 	Print()
 	String() string
+	WriteTo(w io.Writer) (int64, error)
 }
 
-func Diff(a, b interface{}) Differ {
+func New(a, b interface{}) Differ {
 	textA := getText(a)
 	textB := getText(b)
 
@@ -66,12 +67,16 @@ func Diff(a, b interface{}) Differ {
 }
 
 func getText(v interface{}) string {
+	return fmt.Sprintf("%s", Value(v))
+}
+
+func Value(v interface{}) interface{} {
 	vt := reflect.TypeOf(v)
 	if vt.Kind() == reflect.Ptr {
 		vv := reflect.ValueOf(v)
 		v = vv.Elem().Interface()
 	}
-	return fmt.Sprintf("%s", v)
+	return v
 }
 
 type wordDiff struct {
@@ -81,12 +86,19 @@ type wordDiff struct {
 
 func (d *wordDiff) Print() {
 	d.diff(os.Stdout)
+	fmt.Println()
 }
 
 func (d *wordDiff) String() string {
 	var buf bytes.Buffer
 	d.diff(&buf)
 	return buf.String()
+}
+
+func (d *wordDiff) WriteTo(w io.Writer) (int64, error) {
+	var buf bytes.Buffer
+	d.diff(&buf)
+	return buf.WriteTo(w)
 }
 
 func (d *wordDiff) diff(w io.Writer) {
@@ -118,12 +130,19 @@ type unifiedDiff struct {
 
 func (d *unifiedDiff) Print() {
 	d.diff(os.Stdout)
+	fmt.Println()
 }
 
 func (d *unifiedDiff) String() string {
 	var buf bytes.Buffer
 	d.diff(&buf)
 	return buf.String()
+}
+
+func (d *unifiedDiff) WriteTo(w io.Writer) (int64, error) {
+	var buf bytes.Buffer
+	d.diff(&buf)
+	return buf.WriteTo(w)
 }
 
 func (d *unifiedDiff) diff(w io.Writer) {
