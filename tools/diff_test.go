@@ -1,10 +1,10 @@
-package testutil
+package tools
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/prasek/go-testutil/internal"
+	"github.com/prasek/loupe/internal"
 	"github.com/stretchr/testify/assert"
 )
 

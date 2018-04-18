@@ -1,4 +1,4 @@
-package testutil
+package tools
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/prasek/go-testutil/internal"
+	"github.com/prasek/loupe/internal"
 	"github.com/stretchr/testify/assert"
 )
 

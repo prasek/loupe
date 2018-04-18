@@ -521,7 +521,7 @@ ok  	github.com/jhump/protoreflect/grpcreflect	1.026s	coverage: 41.4% of stateme
 ?   	github.com/jhump/protoreflect/internal/testprotos	[no test files]
 ?   	github.com/jhump/protoreflect/internal/testprotos/nopkg	[no test files]
 ?   	github.com/jhump/protoreflect/internal/testprotos/pkg	[no test files]
-?   	github.com/jhump/protoreflect/internal/testutil	[no test files]
+?   	github.com/jhump/protoreflect/internal/tools	[no test files]
 
 travis_time:end:009e4af0:start=1523896973592531250,finish=1523897055633306387,duration=82040775137[0K
 [32;1mThe command "make ci" exited with 0.[0m

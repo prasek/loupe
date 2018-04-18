@@ -10,15 +10,15 @@ import (
 	"path"
 	"regexp"
 
-	"github.com/prasek/go-testutil/internal"
-	"github.com/prasek/go-testutil/testutil"
+	"github.com/prasek/loupe/internal"
+	"github.com/prasek/loupe/tools"
 )
 
 var regExFilename = regexp.MustCompile(`gen\.go\:[0-9]*\:`)
 
 func main() {
-	var res *testutil.TestResults
-	var m *testutil.TestMock
+	var res *tools.TestResults
+	var m *tools.TestMock
 	var a, b interface{}
 	var d string
 	var tests = internal.Tests
@@ -34,11 +34,11 @@ func main() {
 		default:
 			panic(fmt.Sprintf("unkonwn file type %v", t.InputType))
 		}
-		d = testutil.Diff(a, b).String()
+		d = tools.Diff(a, b).String()
 		writeFile(t.DiffFile, []byte(d))
 
-		m = testutil.Mock()
-		testutil.AssertDeepEqual(m, a, b, "a, b not equal: see diff")
+		m = tools.Mock()
+		tools.AssertDeepEqual(m, a, b, "a, b not equal: see diff")
 		res = m.Results()
 		res.Out = regExFilename.ReplaceAllString(res.Out, ":")
 		writeFile(t.DeEqFile, []byte(res.Out))
