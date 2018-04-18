@@ -33,9 +33,9 @@ func TestDeepEqual(t *testing.T) {
 			panic(fmt.Sprintf("unkonwn file type %v", test.InputType))
 		}
 
-		c = readFile(test.DeEqFile)
-
-		//we're testing a test helper, so mock it and get the results
+		// AssertDeepEqual
+		// we're testing a test helper, so mock it and get the results
+		c = readFile(test.AstDeEqFile)
 		m = Mock()
 		AssertDeepEqual(m, a, b, "a, b not equal: see diff")
 		res = m.Results()
@@ -47,6 +47,26 @@ func TestDeepEqual(t *testing.T) {
 		if !assert.Equal(t, c, d, "a, b not equal: see diff") {
 			Diff(c, d).Print()
 		}
+
+		assert.Equal(t, !test.ExpResult, res.Fail, "res.Fail set incorrectly")
+		assert.Equal(t, false, res.FailNow, "res.FailNow set incorrectly")
+
+		// RequireDeepEqual
+		// we're testing a test helper, so mock it and get the results
+		c = readFile(test.ReqDeEqFile)
+		m = Mock()
+		RequireDeepEqual(m, a, b, "a, b not equal: see diff")
+		res = m.Results()
+		d = regExFilename.ReplaceAllString(res.Out, ":")
+
+		c = regExColor.ReplaceAllString(c, "")
+		d = regExColor.ReplaceAllString(d, "")
+
+		if !assert.Equal(t, c, d, "a, b not equal: see diff") {
+			Diff(c, d).Print()
+		}
+		assert.Equal(t, false, res.Fail, "res.Fail set incorrectly")
+		assert.Equal(t, !test.ExpResult, res.FailNow, "res.FailNow set incorrectly")
 	}
 }
 

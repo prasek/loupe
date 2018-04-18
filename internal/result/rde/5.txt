@@ -1,0 +1,18 @@
+[31m=================================================================
+[0m[31m: Not Equal ([]internal.TestStruct/internal.TestStruct)
+a, b not equal: see diff
+[0m[31m=================================================================
+[0m[31m[{foo %!s(int=5) %!s(bool=false) bar {zap pow}} [0m
+{bar %!s(int=5) %!s(bool=true) bar {zap pow}}
+[31m][0m
+
+@@ -1,52 +1,4 @@
+[31m-[{foo %!s(int=5) %!s(bool=false) bar {zap pow}} 
+[0m {bar
+
+@@ -42,5 +42,4 @@
+ ow}}
+[31m-]
+[0m
+
+

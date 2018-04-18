@@ -1,0 +1,35 @@
+[31m=================================================================
+[0m[31m: Not Equal (string/string)
+a, b not equal: see diff
+[0m[31m=================================================================
+[0m@@ -329,16 +329,24 @@
+ a amqp)
+[32m+newline
+[0m startup:
+
+@@ -886,41 +886,54 @@
+ tu^M
+[31m-Description:^IUbuntu 14.04.5 LTS^M
+[0m[32m+Description:^IUbuntu 14.04.5 LTS^M-modifiedline
+[0m Rele
+
+@@ -1559,32 +1559,39 @@
+ 32^M
+[31m- Go version:   go1.8.3^M
+[0m[32m+ prefix-Go version:   go1.8.3^M
+[0m  Git
+
+@@ -2215,87 +2215,95 @@
+ er^M
+[31m-the terms of the GNU General Public License as published by the Free Software^M
+[0m[32m+the terms of the [middle]GNU General Public License as published by the Free Software^M
+[0m Foun
+
+@@ -2509,37 +2509,46 @@
+ ).^M
+[31m-%1B[34m%1B[1mheroku version%1B[0m^M
+[0m[32m+%1B[34m%1B[1mherokucolorcode version%1B[0m^M
+[0m hero
+
+
+

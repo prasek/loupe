@@ -41,7 +41,13 @@ func main() {
 		tools.AssertDeepEqual(m, a, b, "a, b not equal: see diff")
 		res = m.Results()
 		res.Out = regExFilename.ReplaceAllString(res.Out, ":")
-		writeFile(t.DeEqFile, []byte(res.Out))
+		writeFile(t.AstDeEqFile, []byte(res.Out))
+
+		m = tools.Mock()
+		tools.RequireDeepEqual(m, a, b, "a, b not equal: see diff")
+		res = m.Results()
+		res.Out = regExFilename.ReplaceAllString(res.Out, ":")
+		writeFile(t.ReqDeEqFile, []byte(res.Out))
 	}
 }
 

@@ -3,7 +3,7 @@
 default: deps checkgofmt vet predeclared staticcheck unused golint errchack ineffassign test
 
 .PHONY: ci
-ci: deps checkgofmt vet predeclared testcover
+ci: deps checkgofmt vet predeclared staticcheck unused golint errchack ineffassign testcover
 
 .PHONY: deps
 deps:
@@ -70,7 +70,7 @@ test:
 
 .PHONY: generate
 generate:
-	go generate github.com/jhump/protoreflect/internal/testprotos/
+	go generate
 
 .PHONY: testcover
 testcover:
