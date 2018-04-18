@@ -1,5 +1,5 @@
 # loupe
-
+(/ˈluːp/ LOOP) is a simple, small magnification device used to see small details more closely. 
 
 ## Diff(a,b).String()
 Diff any type and get color coded unified diffs for terminal output. Uses diffmatchpatch internally.
