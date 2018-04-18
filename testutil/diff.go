@@ -1,19 +1,14 @@
-package diff
+package testutil
 
 import (
 	"bytes"
 	"fmt"
 	"io"
 	"os"
-	"reflect"
 	"strings"
 
-	"github.com/fatih/color"
 	dmp "github.com/sergi/go-diff/diffmatchpatch"
 )
-
-var red = color.New(color.FgRed)
-var green = color.New(color.FgGreen)
 
 const (
 	nle = "%0A"
@@ -36,7 +31,7 @@ type Differ interface {
 	WriteTo(w io.Writer) (int64, error)
 }
 
-func New(a, b interface{}) Differ {
+func Diff(a, b interface{}) Differ {
 	textA := getText(a)
 	textB := getText(b)
 
@@ -66,19 +61,6 @@ func New(a, b interface{}) Differ {
 
 }
 
-func getText(v interface{}) string {
-	return fmt.Sprintf("%s", Value(v))
-}
-
-func Value(v interface{}) interface{} {
-	vt := reflect.TypeOf(v)
-	if vt.Kind() == reflect.Ptr {
-		vv := reflect.ValueOf(v)
-		v = vv.Elem().Interface()
-	}
-	return v
-}
-
 type wordDiff struct {
 	a string
 	b string
@@ -96,6 +78,11 @@ func (d *wordDiff) String() string {
 }
 
 func (d *wordDiff) WriteTo(w io.Writer) (int64, error) {
+	if b, ok := w.(*bytes.Buffer); ok {
+		d.diff(b)
+		return int64(b.Len()), nil
+	}
+
 	var buf bytes.Buffer
 	d.diff(&buf)
 	return buf.WriteTo(w)
@@ -104,6 +91,7 @@ func (d *wordDiff) WriteTo(w io.Writer) (int64, error) {
 func (d *wordDiff) diff(w io.Writer) {
 	gd := dmp.New()
 	diffs := gd.DiffMain(d.a, d.b, false)
+	diffs = gd.DiffCleanupSemanticLossless(diffs)
 
 	for _, diff := range diffs {
 		switch diff.Type {
@@ -140,6 +128,11 @@ func (d *unifiedDiff) String() string {
 }
 
 func (d *unifiedDiff) WriteTo(w io.Writer) (int64, error) {
+	if b, ok := w.(*bytes.Buffer); ok {
+		d.diff(b)
+		return int64(b.Len()), nil
+	}
+
 	var buf bytes.Buffer
 	d.diff(&buf)
 	return buf.WriteTo(w)

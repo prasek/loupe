@@ -1,4 +1,4 @@
-package deepequal
+package testutil
 
 import (
 	"bytes"
@@ -7,23 +7,10 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
-
-	"github.com/fatih/color"
-	"github.com/prasek/go-testutil/diff"
 )
 
-var red = color.New(color.FgRed)
-var green = color.New(color.FgGreen)
-
-//what we require from *t.Testing
-type TestingT interface {
-	Fail()
-	FailNow()
-	Errorf(format string, args ...interface{})
-}
-
 // verifies underlying values are deep equal and prints a diff if not
-func Assert(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
+func AssertDeepEqual(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
 	ok := testDeepEqual(t, exp, act, format, args...)
 	if !ok {
 		t.Fail()
@@ -32,7 +19,7 @@ func Assert(t TestingT, exp, act interface{}, format string, args ...interface{}
 }
 
 // verifies underlying values are deep equal and prints a diff if not
-func Require(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
+func RequireDeepEqual(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
 	ok := testDeepEqual(t, exp, act, format, args...)
 	if !ok {
 		t.FailNow()
@@ -42,7 +29,7 @@ func Require(t TestingT, exp, act interface{}, format string, args ...interface{
 
 // deep compare of underlying values
 func DeepEqual(a, b interface{}) bool {
-	return reflect.DeepEqual(diff.Value(a), diff.Value(b))
+	return reflect.DeepEqual(Value(a), Value(b))
 }
 
 // verifies the underlying instances are equal with diff output
@@ -65,7 +52,7 @@ func testDeepEqual(t TestingT, exp, act interface{}, format string, args ...inte
 	red.Fprintf(&buf, "%s:%d: Not Equal (%T/%T)\n%s\n", base, ln, exp, act, msg)
 	red.Fprintln(&buf, line)
 
-	diff.New(exp, act).WriteTo(&buf)
+	Diff(exp, act).WriteTo(&buf)
 	fmt.Fprintln(&buf)
 	fmt.Fprintln(&buf)
 
