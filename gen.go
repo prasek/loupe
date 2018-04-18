@@ -57,7 +57,13 @@ func readFile(file string) string {
 
 func writeFile(file string, data []byte) error {
 	file = path.Join("internal", file)
-	err := ioutil.WriteFile(file, data, os.FileMode(0770))
+
+	err := os.MkdirAll(path.Dir(file), os.FileMode(0777))
+	if err != nil {
+		return fmt.Errorf("Make dir failed: %v", err)
+	}
+
+	err = ioutil.WriteFile(file, data, os.FileMode(0666))
 	if err != nil {
 		log.Fatal(err)
 	}

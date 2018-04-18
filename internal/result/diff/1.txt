@@ -1,1 +1,11 @@
-aaabbb[32meee[0mcccddd[32mfffggg[0m
+aaabbb
+[32meee[0m
+cccddd
+[32mfffggg[0m
+
+@@ -3,10 +3,19 @@
+ abbb
+[32m+eee
+[0m cccddd
+[32m+fffggg
+[0m

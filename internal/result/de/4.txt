@@ -2,5 +2,25 @@
 [0m[31m: Not Equal (internal.TestStruct/internal.TestStruct)
 a, b not equal: see diff
 [0m[31m=================================================================
-[0m{[31mfoo[0m[32mbar[0m %!s(int=5) %!s(bool=[31mfals[0m[32mtru[0me) bar {zap pow}}
+[0m{
+[31mfoo[0m
+[32mbar[0m
+ %!s(int=5) %!s(bool=
+[31mfals[0m
+[32mtru[0m
+e) bar {zap pow}}
+
+@@ -1,8 +1,8 @@
+ {
+[31m-foo
+[0m[32m+bar
+[0m  %!s
+
+@@ -22,12 +22,11 @@
+ ool=
+[31m-fals
+[0m[32m+tru
+[0m e) b
+
+
 
