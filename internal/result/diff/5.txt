@@ -1,0 +1,1 @@
+[31m[{foo %!s(int=5) %!s(bool=false) bar {zap pow}} [0m{bar %!s(int=5) %!s(bool=true) bar {zap pow}}[31m][0m

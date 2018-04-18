@@ -2,9 +2,6 @@ package testutil
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
-	"path"
 	"reflect"
 
 	"github.com/fatih/color"

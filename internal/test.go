@@ -54,8 +54,8 @@ var Tests = []Test{
 		InputType: ValueInput,
 		InputA:    StructsA,
 		InputB:    StructsA[1],
-		DiffFile:  "result/diff/4.txt",
-		DeEqFile:  "result/de/4.txt",
+		DiffFile:  "result/diff/5.txt",
+		DeEqFile:  "result/de/5.txt",
 	},
 }
 

@@ -1,6 +1,27 @@
 [31m=================================================================
-[0m[31mgen.go:49: Not Equal (string/string)
-a, b not equal
+[0m[31mgen.go:37: Not Equal (string/string)
+a, b not equal: 'aaaaaaaaaaaaaaaaaa
+111111111111111111
+bbbbbbbbbbbbbbbbbb
+cccccccccccccccccc
+dddddddddddddddddd
+eeeeeeeeeeeeeeeeee
+ffffffffffffffffff
+gggggggggggggggggg
+hhhhhhhhhhhhhhhhhh
+iiiiiiiiiiiiiiiiii
+', 'aaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbb
+cccccccccccccccccc
+dddddddddddddddddd
+eeeeeeeeeeeeeeeeee
+ffffffffffffffffff
+222222222222222222
+222222222222222222
+222222222222222222
+hhhhhhhhhhhhhhhhhh
+iiiiiii_+_iiiiiiiiiii
+'
 [0m[31m=================================================================
 [0m@@ -16,27 +16,8 @@
  aaa

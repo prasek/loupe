@@ -1,1 +1,1 @@
-aaa[31mbbb[0mccc[32meee[0mddd[32mfff[0m
+aaabbb[32meee[0mcccddd[32mfffggg[0m

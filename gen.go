@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	var m *mock.TestCaptureMock
+	var m *testutil.TestMock
 	var a, b interface{}
 	var d string
 	var tests = internal.Tests
@@ -25,16 +25,16 @@ func main() {
 			a = t.InputA
 			b = t.InputB
 		case internal.FileInput:
-			a = readFile(t.InputA)
-			b = readFile(t.InputB)
+			a = readFile(t.InputA.(string))
+			b = readFile(t.InputB.(string))
 		default:
 			panic(fmt.Sprintf("unkonwn file type %v", t.InputType))
 		}
 		d = testutil.Diff(a, b).String()
 		writeFile(t.DiffFile, []byte(d))
 
-		m = mock.New()
-		de.Assert(m, a, b, "a, b not equal: '%v', '%v'", a, b)
+		m = testutil.Mock()
+		testutil.AssertDeepEqual(m, a, b, "a, b not equal: '%v', '%v'", a, b)
 		writeFile(t.DeEqFile, []byte(m.Results().Out))
 	}
 }

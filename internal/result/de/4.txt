@@ -1,6 +1,6 @@
 [31m=================================================================
-[0m[31mgen.go:62: Not Equal (main.Test/main.Test)
-a, b tests not equal
+[0m[31mgen.go:37: Not Equal (internal.TestStruct/internal.TestStruct)
+a, b not equal: '{foo 5 false bar {zap pow}}', '{bar 5 true bar {zap pow}}'
 [0m[31m=================================================================
 [0m{[31mfoo[0m[32mbar[0m %!s(int=5) %!s(bool=[31mfals[0m[32mtru[0me) bar {zap pow}}
 
