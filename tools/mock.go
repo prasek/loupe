@@ -9,21 +9,14 @@ import (
 
 var _ TestingT = (*TestMock)(nil)
 
-//what we require from *t.Testing
+//TestingT defines what we require from *t.Testing
 type TestingT interface {
 	Fail()
 	FailNow()
 	Errorf(format string, args ...interface{})
 }
 
-type TestResults struct {
-	Fail    bool
-	FailNow bool
-	Err     string
-	Out     string
-}
-
-//test mock that captures stdout
+//TestMock capture the output normally sent to *testing.T and os.Stdout
 type TestMock struct {
 	res  TestResults
 	r    *os.File
@@ -33,7 +26,15 @@ type TestMock struct {
 	err  bytes.Buffer
 }
 
-//must call results to close pipe and return stdout
+//TestResults contains the output normally sent to *testing.T and os.Stdout
+type TestResults struct {
+	Fail    bool
+	FailNow bool
+	Err     string
+	Out     string
+}
+
+//Mock creates a new TestMock
 func Mock() *TestMock {
 	t := &TestMock{}
 	var err error
@@ -48,14 +49,17 @@ func Mock() *TestMock {
 	return t
 }
 
+//Fail marks the test as failed
 func (t *TestMock) Fail() {
 	t.res.Fail = true
 }
 
+//FailNow marks the test as failed and stops execution
 func (t *TestMock) FailNow() {
 	t.res.FailNow = true
 }
 
+//Errorf writes error info
 func (t *TestMock) Errorf(format string, args ...interface{}) {
 	fmt.Fprintf(&t.err, format, args...)
 }
@@ -66,6 +70,8 @@ func (t *TestMock) run() {
 	t.outc <- buf.String()
 }
 
+//Results detaches from stdout and returns the TestResults that capture
+//the info normally sent to testing.T and stdout
 func (t *TestMock) Results() *TestResults {
 	os.Stdout = t.orig
 	t.w.Close()

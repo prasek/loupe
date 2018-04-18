@@ -9,7 +9,7 @@ import (
 	"runtime"
 )
 
-// verifies underlying values are deep equal and prints a diff if not
+//AssertDeepEqual verifies underlying values are deep equal and prints a diff if not
 func AssertDeepEqual(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
 	ok := testDeepEqual(t, exp, act, format, args...)
 	if !ok {
@@ -18,7 +18,7 @@ func AssertDeepEqual(t TestingT, exp, act interface{}, format string, args ...in
 	return ok
 }
 
-// verifies underlying values are deep equal and prints a diff if not
+//RequireDeepEqual verifies underlying values are deep equal and prints a diff if not
 func RequireDeepEqual(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
 	ok := testDeepEqual(t, exp, act, format, args...)
 	if !ok {
@@ -27,7 +27,7 @@ func RequireDeepEqual(t TestingT, exp, act interface{}, format string, args ...i
 	return ok
 }
 
-// deep compare of underlying values
+//DeepEqual compares underlying values
 func DeepEqual(a, b interface{}) bool {
 	return reflect.DeepEqual(Value(a), Value(b))
 }

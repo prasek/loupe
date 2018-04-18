@@ -28,6 +28,9 @@ func TestDiff(t *testing.T) {
 		c = readFile(test.DiffFile)
 		d = Diff(a, b).String()
 
+		c = regExColor.ReplaceAllString(c, "")
+		d = regExColor.ReplaceAllString(d, "")
+
 		if !assert.Equal(t, c, d, "a, b not equal: see diff") {
 			Diff(c, d).Print()
 		}

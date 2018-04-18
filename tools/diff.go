@@ -26,12 +26,14 @@ var unescaper = strings.NewReplacer(
 	"%0D", "^M", "%7B", "{", "%7D", "}",
 	"%25", "%")
 
+//Differ allows different diff strategies to be returned
 type Differ interface {
 	Print()
 	String() string
 	WriteTo(w io.Writer) (int64, error)
 }
 
+//Diff creates a Differ for comparing a and b
 func Diff(a, b interface{}) Differ {
 	textA := getText(a)
 	textB := getText(b)

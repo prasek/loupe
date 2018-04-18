@@ -41,6 +41,9 @@ func TestDeepEqual(t *testing.T) {
 		res = m.Results()
 		d = regExFilename.ReplaceAllString(res.Out, ":")
 
+		c = regExColor.ReplaceAllString(c, "")
+		d = regExColor.ReplaceAllString(d, "")
+
 		if !assert.Equal(t, c, d, "a, b not equal: see diff") {
 			Diff(c, d).Print()
 		}
