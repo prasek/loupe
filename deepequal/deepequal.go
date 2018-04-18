@@ -1,19 +1,21 @@
 package deepequal
 
 import (
+	"bytes"
 	"fmt"
+	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
 
 	"github.com/fatih/color"
-
 	"github.com/prasek/go-testutil/diff"
 )
 
 var red = color.New(color.FgRed)
 var green = color.New(color.FgGreen)
 
+//what we require from *t.Testing
 type TestingT interface {
 	Fail()
 	FailNow()
@@ -22,7 +24,7 @@ type TestingT interface {
 
 // verifies underlying values are deep equal and prints a diff if not
 func Assert(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
-	ok := testDeepEqual(exp, act, format, args...)
+	ok := testDeepEqual(t, exp, act, format, args...)
 	if !ok {
 		t.Fail()
 	}
@@ -31,7 +33,7 @@ func Assert(t TestingT, exp, act interface{}, format string, args ...interface{}
 
 // verifies underlying values are deep equal and prints a diff if not
 func Require(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
-	ok := testDeepEqual(exp, act, format, args...)
+	ok := testDeepEqual(t, exp, act, format, args...)
 	if !ok {
 		t.FailNow()
 	}
@@ -44,7 +46,7 @@ func DeepEqual(a, b interface{}) bool {
 }
 
 // verifies the underlying instances are equal with diff output
-func testDeepEqual(exp, act interface{}, format string, args ...interface{}) bool {
+func testDeepEqual(t TestingT, exp, act interface{}, format string, args ...interface{}) bool {
 	if DeepEqual(exp, act) {
 		return true
 	}
@@ -57,14 +59,18 @@ func testDeepEqual(exp, act interface{}, format string, args ...interface{}) boo
 
 	const line = "================================================================="
 
-	//var buf bytes.Buffer
+	var buf bytes.Buffer
 
-	red.Println(line)
-	red.Printf("%s:%d: Not Equal (%T/%T)\n%s\n", base, ln, exp, act, msg)
-	red.Println(line)
+	red.Fprintln(&buf, line)
+	red.Fprintf(&buf, "%s:%d: Not Equal (%T/%T)\n%s\n", base, ln, exp, act, msg)
+	red.Fprintln(&buf, line)
 
-	diff.New(exp, act).Print()
-	fmt.Println()
+	diff.New(exp, act).WriteTo(&buf)
+	fmt.Fprintln(&buf)
+	fmt.Fprintln(&buf)
+
+	buf.WriteTo(os.Stdout)
+	t.Errorf("%s:%d: Not Equal (%T/%T)\n%s\n", base, ln, exp, act, msg)
 
 	return false
 }

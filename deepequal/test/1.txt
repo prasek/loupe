@@ -1,0 +1,6 @@
+[31m=================================================================
+[0m[31mgen.go:41: Not Equal (string/string)
+a, b not equal: 'aaabbbcccddd', 'aaaccceeedddfff'
+[0m[31m=================================================================
+[0maaa[31mbbb[0mccc[32meee[0mddd[32mfff[0m
+
