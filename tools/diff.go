@@ -23,7 +23,8 @@ var unescaper = strings.NewReplacer(
 	"%2B", "+", "%24", "$", "%2C", ",",
 	"%23", "#", "%2A", "*", "%0A", "",
 	"%5B", "[", "%5D", "]", "%09", "^I",
-	"%0D", "^M")
+	"%0D", "^M", "%7B", "{", "%7D", "}",
+	"%25", "%")
 
 type Differ interface {
 	Print()
@@ -93,6 +94,9 @@ func (d *wordDiff) diff(w io.Writer) {
 	diffs := gd.DiffMain(d.a, d.b, false)
 	diffs = gd.DiffCleanupSemanticLossless(diffs)
 
+	diffs = gd.DiffCleanupSemantic(diffs)
+
+	//do whole word diff first
 	for _, diff := range diffs {
 		switch diff.Type {
 		case dmp.DiffDelete:
@@ -107,6 +111,43 @@ func (d *wordDiff) diff(w io.Writer) {
 		default:
 			fmt.Fprintf(w, "ERROR: Unknown diff type: %v", diff.Type)
 			return
+		}
+		fmt.Fprintln(w)
+	}
+
+	fmt.Fprintln(w)
+
+	//then individual patches
+	patches := gd.PatchMake(diffs)
+	for _, patch := range patches {
+		lines := strings.Split(patch.String(), nl)
+		for _, line := range lines {
+			if len(line) == 0 {
+				fmt.Fprintln(w)
+				continue
+			}
+			prefix := line[0]
+			switch prefix {
+			case '+', '-':
+				line = strings.TrimSuffix(line, nle)
+				difflines := strings.Split(string(line[1:]), nle)
+				for _, diffline := range difflines {
+					diffline = unescaper.Replace(diffline)
+					switch prefix {
+					case '-':
+						red.Fprintf(w, "-%s\n", diffline)
+					case '+':
+						green.Fprintf(w, "+%s\n", diffline)
+					default:
+						fmt.Fprintf(w, "ERROR: unknown prefix %v", prefix)
+						return
+					}
+				}
+
+			default:
+				line = unescaper.Replace(line)
+				fmt.Fprintln(w, line)
+			}
 		}
 	}
 }
