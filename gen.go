@@ -8,12 +8,16 @@ import (
 	"log"
 	"os"
 	"path"
+	"regexp"
 
 	"github.com/prasek/go-testutil/internal"
 	"github.com/prasek/go-testutil/testutil"
 )
 
+var regExFilename = regexp.MustCompile(`gen\.go\:[0-9]*\:`)
+
 func main() {
+	var res *testutil.TestResults
 	var m *testutil.TestMock
 	var a, b interface{}
 	var d string
@@ -34,8 +38,10 @@ func main() {
 		writeFile(t.DiffFile, []byte(d))
 
 		m = testutil.Mock()
-		testutil.AssertDeepEqual(m, a, b, "a, b not equal: '%v', '%v'", a, b)
-		writeFile(t.DeEqFile, []byte(m.Results().Out))
+		testutil.AssertDeepEqual(m, a, b, "a, b not equal: see diff")
+		res = m.Results()
+		res.Out = regExFilename.ReplaceAllString(res.Out, ":")
+		writeFile(t.DeEqFile, []byte(res.Out))
 	}
 }
 
